@@ -66,7 +66,7 @@ public class WeatherForecast extends Activity {
             InputStream is;
 
             try{
-                URL url = new URL("http://api.openweathermap.org/data/2.5/weather?q=ottawa,ca&APPID=d99666875e0e51521f0040a3d97d0f6a&mode=xml&units=metric");
+                URL url = new URL(args[0]);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setReadTimeout(10000 /* milliseconds */);
                 conn.setConnectTimeout(15000 /* milliseconds */);
@@ -116,29 +116,30 @@ public class WeatherForecast extends Activity {
             }
 
 
-            if(fileExistance(iconName+ ".png")){
+            String imageName = iconName+".png";
+            if(fileExistance(imageName)){
                 FileInputStream fis = null;
-                try {    fis = openFileInput(iconName+ ".png");   }
+                try {    fis = openFileInput(imageName);   }
                 catch (FileNotFoundException e) {    e.printStackTrace();  }
                 image = BitmapFactory.decodeStream(fis);
-                Log.i("WeatherForecast","Looking for "+iconName+ ".png image");
+                Log.i("WeatherForecast","Looking for "+imageName+" image");
                 Log.i("Weather Forecast","Image found locally");
             }else{
                 URL ImageURL = null;
                 try {
-                    ImageURL = new URL("http://openweathermap.org/img/w/" + iconName+ ".png image");
+                    ImageURL = new URL("http://openweathermap.org/img/w/" + imageName);
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
                 image  = getImage(ImageURL);
                 FileOutputStream outputStream = null;
                 try {
-                    outputStream = openFileOutput( iconName + ".png", Context.MODE_PRIVATE);
+                    outputStream = openFileOutput( imageName, Context.MODE_PRIVATE);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
                 image.compress(Bitmap.CompressFormat.PNG, 80, outputStream);
-                Log.i("WeatherForecast","Looking for "+iconName+" image");
+                Log.i("WeatherForecast","Looking for "+imageName+" image");
                 Log.i("Weather Forecast","Image needs to be downloaded");
                 try {
                     outputStream.flush();
